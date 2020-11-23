@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const { json } = require('body-parser');
 const fakeData = require("./fakeData")
 
-const POST = 5000;
+const POST = process.env.PORT || 5000;
 const app = express();
 const DBHOST = 'localhost';
 const DBPOST = 27017;
