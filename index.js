@@ -6,14 +6,14 @@ const fakeData = require("./fakeData")
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-const DBHOST = 'localhost';
-const DBPOST = 27017;
+const DBHOST = 'cluster0.s3j79.mongodb.net';
+const DBPOST = "cluster0.s3j79.mongodb.net";
 const DBNAME = "documents";
 
-mongoose.connect(`mongodb://${DBHOST}:${DBPOST}/${DBNAME}`,
+mongoose.connect("mongodb+srv://CountDown:18082000@cluster0.x0bvk.mongodb.net/countdown?retryWrites=true&w=majority",
     { useNewUrlParse: true, useUnifiedTopology: true},
     err => {
-        if(err){
+        if(!err){
             console.log("Conected to mongoDB")
         }
     })
