@@ -123,6 +123,4 @@ app.delete("/students/:id", (req, res) => {
 })
 
 
-app.listen( POST, () => {
-    console.log("App start at " + POST)
-})
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
