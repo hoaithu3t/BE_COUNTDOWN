@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { json } = require('body-parser');
+const fakeData = require("./fakeData")
 
 const POST = 5000;
 const app = express();
@@ -17,57 +18,82 @@ mongoose.connect(`mongodb://${DBHOST}:${DBPOST}/${DBNAME}`,
         }
     })
 
+
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-const CategorySchema =  mongoose.Schema({
-    name: String
-})
-
 const DocumentSchema = mongoose.Schema({
+    name: String,
     link: String,
+    linkavt: String,
     createTime: Date,    
     source: String,
-    categories: [CategorySchema],
+    subject: String,
+    type: String
 });
-
-  // const document = new DocumentModel({
-    //     link: "link drive",
-    //     createTime: new Date(),    
-    //     source: 'Hieu Mon',
-    //     categories: [
-    //         { 
-    //             name: 'Hoa'
-    //         },{
-    //             name: 'De thi'
-    //         }],
-    //     })
 
 const DocumentModel = mongoose.model('document', DocumentSchema)
 
+//faceData
+fakeData.forEach(el => {
+    const {name, link, linkavt, source, subject, type} = el;
+    const document = new DocumentModel({  
+        name: name,     
+        link: link,
+        linkavt: linkavt,
+        createTime: new Date(),    
+        source: source,        
+        subject: subject,
+        type: type
+    })    
+    document.save()
+});
+
 //create document
 app.post('/documents', (req, res) => {
-    const { link, createTime, source, categories} = req.body();  
-    const document = new DocumentModel({       
+    const {name, link, linkavt, source, categories} = req.body();  
+    const document = new DocumentModel({  
+        name: name,     
         link: link,
+        linkavt: linkavt,
         createTime: new Date(),    
         source: source,
         categories: categories
-    })
+    })   
     document.save().then(() => {
         res.send("Imported!")
     })
 })
 
-//get document
-app.get('/documents', (req, res) => {
+//getAll document
+// app.get('/documents', (req, res) => {
+    // DocumentModel.find((err, data) => {
+    //     if(err) {
+    //         console.log(err);
+    //         res.send("Something went wrong!")
+    //     }
+
+    //     res.json(data)
+    // })
+// })
+
+//filter data
+app.get('/documents', function(req, res){
+    // var posts
+    var {subject, type} = req.query;  
     DocumentModel.find((err, data) => {
         if(err) {
             console.log(err);
             res.send("Something went wrong!")
         }
-        res.json(data)
-    })
+        else{            
+            var result = data.filter((item)=>{    
+            return item.subject == subject && item.type == type
+            });
+            console.log(result)        
+        }        
+    })  
+    
 })
 
 //update document
