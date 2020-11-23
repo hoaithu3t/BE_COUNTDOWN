@@ -80,20 +80,27 @@ app.post('/documents', (req, res) => {
 //filter data
 app.get('/documents', function(req, res){
     // var posts
-    var {subject, type} = req.query;  
+    var {subject, type} = req.query;
+      
     DocumentModel.find((err, data) => {
         if(err) {
             console.log(err);
             res.send("Something went wrong!")
         }
-        else{            
-            var result = data.filter((item)=>{    
-            return item.subject == subject && item.type == type
+        else{ 
+            if(subject != null && subject != "")  {
+                data = data.filter((item)=>{    
+                    return item.subject == subject && item.type == type
+                    });
+            }     
+            if(type != null && type != "")   {
+                data = data.filter((item)=>{    
+                    return item.type == type && item.type == type
             });
-            console.log(result)        
+            }     
+            res.send(data)        
         }        
-    })  
-    
+    })      
 })
 
 //update document
