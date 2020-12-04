@@ -65,17 +65,6 @@ app.post('/documents', (req, res) => {
     })
 })
 
-//getAll document
-// app.get('/documents', (req, res) => {
-    // DocumentModel.find((err, data) => {
-    //     if(err) {
-    //         console.log(err);
-    //         res.send("Something went wrong!")
-    //     }
-
-    //     res.json(data)
-    // })
-// })
 
 //filter data
 app.get('/documents', function(req, res){
@@ -101,7 +90,7 @@ app.get('/documents', function(req, res){
             }
             var endPage = (data.length - prePage > 10) ? (prePage + 10) : (data.length)
             var result = [];
-            for(var i = prePage + 1; i <= endPage; i++ ){
+            for(var i = prePage ; i < endPage; i++ ){
                  result.push(data[i]);
             }             
             res.send(result)        
