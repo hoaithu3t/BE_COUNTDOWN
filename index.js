@@ -80,8 +80,9 @@ app.post('/documents', (req, res) => {
 //filter data
 app.get('/documents', function(req, res){
     // var posts
-    var {subject, type} = req.query;
-      
+    var {subject, type, page} = req.query;
+    if(page == null) page = 1;   
+    var prePage =  (page-1)*10;
     DocumentModel.find((err, data) => {
         if(err) {
             console.log(err);
@@ -90,17 +91,24 @@ app.get('/documents', function(req, res){
         else{ 
             if(subject != null && subject != "")  {
                 data = data.filter((item)=>{    
-                    return item.subject == subject && item.type == type
+                    return item.subject == subject 
                     });
             }     
             if(type != null && type != "")   {
                 data = data.filter((item)=>{    
-                    return item.type == type && item.type == type
+                    return item.type == type
             });
-            }     
-            res.send(data)        
+            }
+            var endPage = (data.length - prePage > 10) ? (prePage + 10) : (data.length)
+            var result = [];
+            for(var i = prePage + 1; i <= endPage; i++ ){
+                 result.push(data[i]);
+            }             
+            res.send(result)        
         }        
-    })      
+    })
+
+ 
 })
 
 //update document
