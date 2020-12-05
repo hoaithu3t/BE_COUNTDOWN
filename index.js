@@ -23,6 +23,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
 const DocumentSchema = mongoose.Schema({
+    id: String,
     name: String,
     link: String,
     linkavt: String,
@@ -93,7 +94,10 @@ app.get('/documents', function(req, res){
             var result = [];
             for(var i = prePage ; i < endPage; i++ ){
                  result.push(data[i]);
-            }             
+            }   
+            result.forEach(el => {
+                el.id = el._id;
+            })
             res.send(result)        
         }        
     })
@@ -104,13 +108,12 @@ app.get('/documents', function(req, res){
 //update document
 app.put('/documents/:id', (req, res) => {
     const id = req.params.id;
-    const {name, link,linkavt,createTime, source, subject, type} = req.body;
+    const {name, link,linkavt, source, subject, type} = req.body;
     DocumentModel.updateOne (
         {_id: id},
         {name: name},
         {link: link},
         {linkavt: linkavt},
-        {createTime: createTime},
         {source: source},
         {subject: subject},
         {type: type},
