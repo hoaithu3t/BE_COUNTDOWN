@@ -103,14 +103,21 @@ app.get('/documents', function(req, res){
 
 //update document
 app.put('/documents/:id', (req, res) => {
-    const {id, link, source, subject, type} = req.body;
+    const id = req.params.id;
+    const {name, link,linkavt,createTime, source, subject, type} = req.body;
     DocumentModel.updateOne (
         {_id: id},
+        {name: name},
         {link: link},
+        {linkavt: linkavt},
+        {createTime: createTime},
         {source: source},
         {subject: subject},
         {type: type},
-    )    
+    ).then(()=> {
+        res.send("Updated!")
+    })    
+
 })
 
 
