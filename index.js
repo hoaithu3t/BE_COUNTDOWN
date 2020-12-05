@@ -51,14 +51,15 @@ fakeData.forEach(el => {
 
 //create document
 app.post('/documents', (req, res) => {
-    const {name, link, linkavt, source, categories} = req.body();  
+    const {name, link, linkavt, source, subject, type} = req.body();  
     const document = new DocumentModel({  
         name: name,     
         link: link,
         linkavt: linkavt,
         createTime: new Date(),    
         source: source,
-        categories: categories
+        subject: subject,
+        type: type
     })   
     document.save().then(() => {
         res.send("Imported!")
@@ -102,12 +103,13 @@ app.get('/documents', function(req, res){
 
 //update document
 app.put('/documents/:id', (req, res) => {
-    const {id, link, source, categories} = req.body();
+    const {id, link, source, subject, type} = req.body();
     DocumentModel.updateOne (
         {_id: id},
         {link: link},
         {source: source},
-        {categories: categories}
+        {subject: subject},
+        {type: type},
     )    
 })
 
