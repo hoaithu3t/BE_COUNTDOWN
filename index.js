@@ -106,7 +106,7 @@ app.get('/documents', function(req, res){
 })
 
 //update document
-app.put('/documents/:id', (req, res) => {
+app.put('/documents', (req, res) => {
     const id = req.params.id;    
     DocumentModel.findOneAndUpdate({ _id: id }, req.body, {
         new: true,
@@ -118,7 +118,8 @@ app.put('/documents/:id', (req, res) => {
 
 
 //delete document
-app.delete("/documents", (req, res) => {
+app.delete("/documents/:id", (req, res) => {
+    console.log(req.params.id)
     DocumentModel.deleteOne({_id: req.params.id}).then(() => {
         res.send("Deleted!")
     })
