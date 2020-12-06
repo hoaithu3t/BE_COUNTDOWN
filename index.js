@@ -118,7 +118,7 @@ app.put('/documents/:id', (req, res) => {
 
 
 //delete document
-app.delete("/students/:id", (req, res) => {
+app.delete("/documents", (req, res) => {
     DocumentModel.deleteOne({_id: req.params.id}).then(() => {
         res.send("Deleted!")
     })
