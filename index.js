@@ -71,9 +71,7 @@ app.post('/documents', (req, res) => {
 //filter data
 app.get('/documents', function(req, res){
     // var posts
-    var {subject, type, page} = req.query;
-    if(page == null) page = 1;   
-    var prePage =  (page-1)*10;
+    var {subject, type, take} = req.query;
     DocumentModel.find((err, data) => {
         if(err) {
             console.log(err);
@@ -90,9 +88,8 @@ app.get('/documents', function(req, res){
                     return item.type == type
             });
             }
-            var endPage = (data.length - prePage > 10) ? (prePage + 10) : (data.length)
             var result = [];
-            for(var i = prePage ; i < endPage; i++ ){
+            for(var i = 0 ; i < take; i++ ){
                  result.push(data[i]);
             }   
             result.forEach(el => {
