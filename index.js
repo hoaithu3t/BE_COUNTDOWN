@@ -103,7 +103,7 @@ app.get('/documents', function(req, res){
 })
 
 //update document
-app.put('/documents', (req, res) => {
+app.put('/documents/:id', (req, res) => {
     const id = req.params.id;    
     DocumentModel.findOneAndUpdate({ _id: id }, req.body, {
         new: true,
