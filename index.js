@@ -33,9 +33,27 @@ const DocumentSchema = mongoose.Schema({
     type: String
 });
 
-const DocumentModel = mongoose.model('document', DocumentSchema)
+const TestDateSchema = mongoose.Schema({
+    id: String,
+    name: String,
+    date: Date
+});
 
-//faceData
+const DocumentModel = mongoose.model('document', DocumentSchema)
+const TestDateModel = mongoose.model('testDate', TestDateSchema)
+
+
+const fakeDate = [
+    {
+        name: "JLPT - Kì thi năng lực tiếng Nhật",
+        date: new Date(2021, 4, 7)
+    },
+    {
+        name: "Kì thi THPTQG - 2021",
+        date: new Date(2021, 21, 7)
+    }
+]
+//fakeData
 fakeData.forEach(el => {
     const {name, link, linkavt, source, subject, type} = el;
     const document = new DocumentModel({  
@@ -49,6 +67,14 @@ fakeData.forEach(el => {
     })    
     document.save()
 });
+
+fakeDate.forEach(el => {
+    const testDate = new TestDateModel({
+        name: el.name,
+        date: el.date
+    })
+    testDate.save();
+})
 
 //create document
 app.post('/documents', (req, res) => {
@@ -116,8 +142,58 @@ app.put('/documents/:id', (req, res) => {
 
 //delete document
 app.delete("/documents/:id", (req, res) => {
-    console.log(req.params.id)
     DocumentModel.deleteOne({_id: req.params.id}).then(() => {
+        res.send("Deleted!")
+    })
+})
+
+
+//create date
+app.post('/dates', (req, res) => {
+    const {name, date} = req.body;     
+    const document = new TestDateModel({  
+        name: name,     
+        date: date
+    })   
+    document.save().then(() => {
+        res.send("Imported!")
+    })
+})
+
+
+//getdate
+app.get('/dates', function(req, res){    
+    TestDateModel.find((err, data) => {
+        if(err) {
+            console.log(err);
+            res.send("Something went wrong!")
+        }
+        else{
+            data.forEach(el => {
+                el.id = el._id
+            })
+            res.send(data)        
+        }        
+    })
+
+ 
+})
+
+//update dates
+app.put('/dates/:id', (req, res) => {
+    const id = req.params.id;    
+    TestDateModel.findOneAndUpdate({ _id: id }, req.body, {
+        new: true,
+      }).then(() => {
+          res.send("updated")
+      });
+
+})
+
+
+//delete dates
+app.delete("/dates/:id", (req, res) => {
+    TestDateModel.deleteOne({_id: req.params.id}).then(() => {
         res.send("Deleted!")
     })
 })
